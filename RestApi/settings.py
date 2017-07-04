@@ -25,7 +25,7 @@ SECRET_KEY = 'd+_*hiz!9m1k+=t5n=va7=mpny2=jx-2__nxr7@nknoqm)ppc1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['zh.1234tv.com']
+ALLOWED_HOSTS = ['zh.1234tv.com','localhost']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +120,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS':{
+        'basic':{
+            'type':'basic'
+        }
+    }
+}
