@@ -22,6 +22,8 @@ def query(request):
         data = JSONParser().parse(request)
         hls = data.get('hls')
         
+        cache.set('hls',"1111")
+        logger.info(cache.get('hls'))
         
         cache_result =  cache.get(hls)
         logger.info(cache)
