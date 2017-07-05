@@ -129,16 +129,6 @@ SWAGGER_SETTINGS = {
     }
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 600,
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000
-        }
-    }
-}
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

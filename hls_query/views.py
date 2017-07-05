@@ -6,7 +6,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 import m3u8
-from django.core.cache import cache
+from django.core.cache import cache,caches
 import logging
 # Create your views here.
 
@@ -24,6 +24,7 @@ def query(request):
         
         
         cache_result =  cache.get(hls)
+        logger.info(cache)
 
         if cache_result == None:
             try:
