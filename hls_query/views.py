@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import status
 from django.http import HttpResponse,JsonResponse
 from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser,FormParser
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 import m3u8
@@ -19,7 +19,7 @@ def query(request):
         return HttpResponse(status=404)
 
     elif request.method == 'POST':
-        data = JSONParser().parse(request)
+        data = FormParser().parse(request)
         hls = data.get('hls')
         
         cache_result =  cache.get(hls)
