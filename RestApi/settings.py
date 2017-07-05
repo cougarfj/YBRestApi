@@ -129,6 +129,13 @@ SWAGGER_SETTINGS = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -22,11 +22,8 @@ def query(request):
         data = JSONParser().parse(request)
         hls = data.get('hls')
         
-        cache.set('hls',"1111")
-        logger.info(cache.get('hls'))
-        
         cache_result =  cache.get(hls)
-        logger.info(cache)
+        logger.info(str(cache))
 
         if cache_result == None:
             try:
@@ -36,7 +33,7 @@ def query(request):
                         sub_m3u8_obj = m3u8.load(playlist.uri)
                 cache.set(hls,{"error":"0","mesage":"Ready"},60)
                 logger.info(hls + ': Ready')
-                return JsonResponse({"error":"0","mesage":"Ready"},status=200)
+                return JsonResponse({"error":"0","mesage":"Ready"},status=status.HTTP_200_OK)
             except Exception as err:
                 logger.info(hls + ': Not Ready')
                 return JsonResponse({"error":"1","mesage":"Not Ready"},status=status.HTTP_200_OK) 
