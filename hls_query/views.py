@@ -23,7 +23,6 @@ def query(request):
         hls = data.get('hls')
         
         cache_result =  cache.get(hls)
-        logger.info(str(cache))
 
         if cache_result == None:
             try:
