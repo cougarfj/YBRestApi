@@ -38,11 +38,10 @@ def query(request,hls):
                     req = requests.get(file_url)
                     if (req.status_code != 200):
                         ready = False
-                        break
 
                 if ready:
                     cache.set(hls_str,{"error":"0","mesage":"Ready"},60)
-                    logger.info(file_url + ': Ready')
+                    logger.info(hls_str + ': Ready')
                     return Response({"error":"0","mesage":"Ready"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
                 else:
                     logger.info(file_url + ': Not Ready[切片不可访问]')
