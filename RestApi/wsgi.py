@@ -12,7 +12,7 @@ import os, sys
 from django.core.wsgi import get_wsgi_application
 
 
-sys.path.append('/data/web/zh.1234tv.com/YBRestApi')
+sys.path.append('/data/web/zh.1234tv.com/RestApi')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "RestApi.settings")
 
 application = get_wsgi_application()
