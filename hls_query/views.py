@@ -29,10 +29,10 @@ def query(request,hls):
                     sub_m3u8_obj = m3u8.load(playlist.uri)
             cache.set(hls_str,{"error":"0","mesage":"Ready"},60)
             logger.info(hls_str + ': Ready')
-            return JsonResponse({"error":"0","mesage":"Ready"},status=status.HTTP_200_OK,header={"Access-Control-Allow-Origin":"*"})
+            return Response({"error":"0","mesage":"Ready"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
         except Exception as err:
             logger.info(hls_str + ': Not Ready')
-            return JsonResponse({"error":"1","mesage":"Not Ready"},status=status.HTTP_200_OK,header={"Access-Control-Allow-Origin":"*"}) 
+            return Response({"error":"1","mesage":"Not Ready"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json") 
     else:
         logger.info(hls_str + ':Ready From Cache')
-        return JsonResponse(cache_result,status=status.HTTP_200_OK,header={"Access-Control-Allow-Origin":"*"})
+        return Response(cache_result,status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")

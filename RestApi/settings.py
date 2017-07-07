@@ -25,7 +25,7 @@ SECRET_KEY = 'd+_*hiz!9m1k+=t5n=va7=mpny2=jx-2__nxr7@nknoqm)ppc1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['zh.1234tv.com','localhost']
+ALLOWED_HOSTS = ['zh.1234tv.com','localhost','127.0.0.1','192.168.2.117']
 
 
 # Application definition
