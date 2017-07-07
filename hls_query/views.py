@@ -19,7 +19,8 @@ logger = logging.getLogger('django')
 def query(request,hls):
     
     hls_str = str(base64.b64decode(hls),'utf-8')
-    cache_result =  cache.get(hls_str)
+    # cache_result =  cache.get(hls_str)
+    cache_result = None
 
     if cache_result == None:
         try:
