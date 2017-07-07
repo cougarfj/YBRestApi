@@ -29,19 +29,27 @@ def query(request,hls):
             if m3u8_obj.is_variant:
                 for playlist in m3u8_obj.playlists:
                     m3u8_obj = m3u8.load(playlist.uri)
-                    for uri in m3u8_obj.files:
-                        file_url = m3u8_obj.base_uri+uri
-                        req = requests.get(file_url)
-                        if (req.status_code == 200):
-                            cache.set(hls_str,{"error":"0","mesage":"Ready"},60)
-                            logger.info(file_url + ': Ready')
-                            return Response({"error":"0","mesage":"Ready"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
-                        else:
-                            logger.info(file_url + ': Not Ready')
+                    break
             
-            logger.info(file_url + ':Not Ready')
-            return Response({"error":"0","mesage":"Not Ready"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
+            if len(m3u8_obj.files) > 0:
+                ready = True
+                for uri in m3u8_obj.files:
+                    file_url = m3u8_obj.base_uri+uri
+                    req = requests.get(file_url)
+                    if (req.status_code != 200):
+                        ready = False
+                        break
 
+                if ready:
+                    cache.set(hls_str,{"error":"0","mesage":"Ready"},60)
+                    logger.info(file_url + ': Ready')
+                    return Response({"error":"0","mesage":"Ready"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
+                else:
+                    logger.info(file_url + ': Not Ready[切片不可访问]')
+                    return Response({"error":"1","mesage":"Not Ready[切片不可访问]"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
+            else:
+                logger.info(file_url + ':Not Ready[切片文件列表为空]')
+                return Response({"error":"1","mesage":"Not Ready[切片文件列表为空]"},status=status.HTTP_200_OK,headers={"Access-Control-Allow-Origin":"*"},content_type="application/json")
             
         except Exception as err:
             logger.info(hls_str + ': Not Ready')
