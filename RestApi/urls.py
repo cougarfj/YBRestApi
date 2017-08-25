@@ -15,13 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from hls_query import views
-from rest_framework_swagger.views import get_swagger_view
+# from Push import views
 
-
-schema_view = get_swagger_view(title='Pastebin API')
 
 urlpatterns = [
-    url(r'^hls-query/(?P<hls>.*)$',views.query),
-    url(r'^api-doc/$',schema_view)
+    url(r'^admin/', admin.site.urls),
+    url(r'^api/doc/',include('swaggerdoc.urls')),
+    url(r'^api/v1/push/',include('Push.urls'))
 ]

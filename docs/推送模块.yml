@@ -1,0 +1,38 @@
+swagger: '2.0'
+info:
+  title: 推送模块 API
+  description: 与推送相关的API均在此 
+  version: "1.0.0"
+# the domain of the service
+host: localhost:8000
+# array of all schemes that your API supports
+schemes:
+  - http
+  - https
+# will be prefixed to all paths
+basePath: /api/v1
+produces:
+  - application/json
+paths:
+  /push/register:
+    post:
+      summary: 注册推送设备
+      parameters:
+        - name: device_token
+          in: formData
+          required: true
+          type: string
+          description: 设备唯一标示符
+        - name: device_type
+          in: formData
+          enum: ['iOS','Android']
+          required: true
+          type: string
+          description: 设备类型
+        - name: user_id
+          in: formData
+          type: string
+          required: true
+          description: 设备绑定的用户ID
+      tags:
+        - Push

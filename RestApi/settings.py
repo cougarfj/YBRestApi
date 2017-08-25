@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['zh.1234tv.com','localhost','127.0.0.1','192.168.2.117']
 # Application definition
 
 INSTALLED_APPS = [
+    'Push.apps.PushConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
+    'swaggerdoc',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +79,10 @@ WSGI_APPLICATION = 'RestApi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'YunBoRest',
+        'USER': 'root',
+        'PASSWORD': '',
     }
 }
 
@@ -123,12 +127,18 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = './static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'docs'),
+]
+
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS':{
         'basic':{
             'type':'basic'
         }
-    }
+    },
+    'DOC_EXPANSION':'list',
+    'JSON_EDITOR': True,
 }
 
 # CACHES = {
@@ -160,6 +170,11 @@ LOGGING = {
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.FormParser',
-    )
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+    'DEFAULT_MODEL_SERIALIZER_CLASS': (
+        'rest_framework.serializers.ModelSerializer',
+    ),
 }
 
