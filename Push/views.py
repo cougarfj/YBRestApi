@@ -37,7 +37,6 @@ def push(request):
     """
     推送消息
     """
-    
     return Response(data="OK",status=200)
 
 

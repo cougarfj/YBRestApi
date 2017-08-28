@@ -33,7 +33,7 @@ def push_ios_message(device_token, message, custom_data = {}):
 
 
 
-def push_android_message(device_token, title, message, custom_data = None):
+def push_android_message(device_token, title, message, custom_data = {}):
     msg = xinge.Message()
     msg.type = constant.MESSAGE_TYPE_ANDROID_NOTIFICATION
     msg.title = title
@@ -41,5 +41,5 @@ def push_android_message(device_token, title, message, custom_data = None):
     msg.expireTime = 300
     msg.custom = {}
     msg.style = style.Style()
-    
+
     return android_push.PushSingleDevice(deviceToken = device_token, message = msg)
