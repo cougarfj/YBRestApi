@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  title: 推送模块 API
-  description: 与推送相关的API均在此 
+  title: 1234TV API
+  description: 1234TV API 列表以及介绍 
   version: "1.0.0"
 # the domain of the service
 host: localhost:8000
@@ -14,6 +14,32 @@ basePath: /api/v1
 produces:
   - application/json
 paths:
+  /test/push/message:
+    post:
+      summary: 推送消息测试接口
+      parameters:
+        - name: device_token
+          in: formData
+          required: true
+          type: string
+          description: 设备唯一标示符
+        - name: device_type
+          in: formData
+          enum: ['iOS','Android']
+          required: true
+          type: string
+          description: 设备类型
+        - name: message
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的消息
+        - name: custom_data
+          in: formData
+          type: string
+          description: 额外自定义消息
+      tags:
+        - Test
   /push/register:
     post:
       summary: 注册推送设备

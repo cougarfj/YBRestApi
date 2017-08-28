@@ -28,3 +28,16 @@ def register(request):
         serializer.save()
         return RestResponse(data=serializer.data,message="注册设备成功")
     return RestResponse(data=None,message="注册设备失败",detail=serializer.errors)
+
+
+
+
+@api_view(['POST'])
+def push(request):
+    """
+    推送消息
+    """
+    
+    return Response(data="OK",status=200)
+
+

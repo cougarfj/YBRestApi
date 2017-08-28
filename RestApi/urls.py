@@ -21,5 +21,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/doc/',include('swaggerdoc.urls')),
-    url(r'^api/v1/push/',include('Push.urls'))
+    url(r'^api/v1/push/',include('Push.urls')),
+    url(r'^api/v1/test/',include('Test.urls')),
 ]
