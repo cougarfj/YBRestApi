@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+#-*- coding:utf8 -*-
+#
+# Author: Root
+# Date: Tue Aug 29 2017
+# File: constant.py
+# 
+# Description: 
+#
+
+
+OK = 0        
+ERR_MISS_PARAMS = 1
+ERR_PARAMS_ERROR = 2
+ERR_DEVICE_NOT_EXSIT = 3
+ERR_PUSH_MESSAGE_FAILED = 4
+ERR_PARSE_JSON_FAILED = 5
+ERR_DEVICE_EMPTY = 6
+ERR_USER_NOT_EXSIT = 9
+
+
+ERR_XINGE_BUSY = 7
+ERR_XINGE_TOEKN_NOT_EXSIT = 40
+ERR_XINGE_APNS_BUSY = 71
+ERR_XINGE_MSG_TOO_LONG = 73
+ERR_XINGE_MSG_FREQUENT =76 #请求太过频繁

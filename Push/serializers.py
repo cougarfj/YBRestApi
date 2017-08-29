@@ -17,3 +17,5 @@ class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = ('device_token', 'device_type', 'user_id')
+
+    

@@ -12,5 +12,8 @@ from django.conf.urls import url
 from Push import views
 
 urlpatterns = [
-    url(r'^register',views.register)
+    url(r'^register_device',views.register_device),
+    url(r'^message_to_all',views.message_to_all),
+    url(r'^message_to_one',views.message_to_one),
+    url(r'^message_to_multiple',views.message_to_multiple)
 ]

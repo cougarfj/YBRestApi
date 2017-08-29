@@ -1,0 +1,206 @@
+swagger: '2.0'
+info:
+  title: 1234TV API
+  description: |
+    相关常量枚举:
+
+
+        接口返回状态码(code):
+          OK = 0                    #正常调用
+          ERR_MISS_PARAMS = 1       #缺少参数 
+          ERR_PARAMS_ERROR = 2      #参数错误
+          ERR_DEVICE_NOT_EXSIT = 3  #设备不存在
+          ERR_PUSH_MESSAGE_FAILED = 4  #推送出错
+          ERR_PARSE_JSON_FAILED = 5    #解析JSON出错
+          ERR_DEVICE_EMPTY = 6   #没有设备
+          ERR_USER_NOT_EXSIT = 9  #用户不存在
+          ERR_XINGE_BUSY = 7     #信鸽服务器繁忙
+          ERR_XINGE_TOEKN_NOT_EXSIT = 40  #不存在的device_token
+          ERR_XINGE_APNS_BUSY = 71 #APNS服务器繁忙
+          ERR_XINGE_MSG_TOO_LONG = 73  #消息数据太长(iOS长度限制:256个字节,Android长度限制:800个字节)
+          ERR_XINGE_MSG_FREQUENT =76 #请求太过频繁
+
+        自定义数据动作类型(action):
+          NO_ACTION = 0   #没有动作
+          OPEN_WEB_BROWSER = 1 #打开浏览器,data里数据为url
+          ENTER_LIVE_ROOM = 2 #进入直播间,data里数据为roomID
+          <未完待续>
+      
+  version: "1.0.0"
+# the domain of the service
+host: localhost:8000
+# array of all schemes that your API supports
+schemes:
+  - http
+  - https
+# will be prefixed to all paths
+basePath: /api/v1
+produces:
+  - application/json
+paths:
+  /test/push/message_to_one:
+    post:
+      summary: 推送消息给单个设备
+      parameters:
+        - name: device_token
+          in: formData
+          required: true
+          type: string
+          description: 设备唯一标示符
+        - name: device_type
+          in: formData
+          enum: ['iOS','Android']
+          required: true
+          type: string
+          description: 设备类型
+        - name: alert
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的弹框标题
+        - name: custom_data
+          in: formData
+          type: string
+          description: 额外自定义消息
+      tags:
+        - Test
+
+  /test/push/message_to_multiple:
+    post:
+      summary: 推送消息到多个设备
+      parameters:
+        - name: device_token_list
+          in: formData
+          required: true
+          type: string
+          description: 设备ID列表(json字符串格式)
+        - name: alert
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的弹框标题
+        - name: custom_data
+          in: formData
+          type: string
+          description: 额外自定义消息
+      tags:
+        - Test
+
+  /test/push/message_to_all:
+    post:
+      summary: 推送消息到所有设备
+      parameters:
+        - name: alert
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的弹框标题
+        - name: custom_data
+          in: formData
+          type: string
+          description: 额外自定义消息
+      tags:
+        - Test
+
+
+
+  /push/register_device:
+    post:
+      summary: 注册推送设备
+      parameters:
+        - name: device_token
+          in: formData
+          required: true
+          type: string
+          description: 设备唯一标示符
+        - name: device_type
+          in: formData
+          enum: ['iOS','Android']
+          required: true
+          type: string
+          description: 设备类型
+        - name: user_id
+          in: formData
+          type: string
+          required: true
+          description: 设备绑定的用户ID
+      tags:
+        - Push-Core
+
+  
+  /push/message_to_one:
+    post:
+      summary: 推送消息给单个用户
+      parameters:
+        - name: user_id
+          in: formData
+          required: true
+          type: string
+          description: 用户ID
+        - name: alert
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的弹框标题
+        - name: custom_data
+          in: formData
+          type: string
+          description: | 
+            额外自定义消息(JSON格式字符串),格式如下:
+            {
+              action:1
+              data:{}
+            }
+      tags:
+        - Push-Core
+
+  /push/message_to_multiple:
+    post:
+      summary: 推送消息给多个用户(2~1000范围内)
+      description: 超出1000范围内的用户请多次调用本接口
+      parameters:
+        - name: user_id_list
+          in: formData
+          required: true
+          type: string
+          description: 用户ID列表(json字符串格式)
+        - name: alert
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的弹框标题
+        - name: custom_data
+          in: formData
+          type: string
+          description: | 
+            额外自定义消息(JSON格式字符串),格式如下:
+            {
+              action:1
+              data:{}
+            }
+      tags:
+        - Push-Core
+
+  /push/message_to_all:
+    post:
+      summary: 推送消息给所有用户
+      parameters:
+        - name: alert
+          in: formData
+          type: string
+          required: true
+          description: 需要推送的弹框标题
+        - name: custom_data
+          in: formData
+          type: string
+          description: | 
+            额外自定义消息(JSON格式字符串),格式如下:
+            {
+              action:1
+              data:{}
+            }
+      tags:
+        - Push-Core
+
+
+  

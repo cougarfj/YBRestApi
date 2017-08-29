@@ -12,30 +12,100 @@ from django.http import HttpResponse,JsonResponse
 from rest_framework.request import QueryDict
 from RestApi.response import RestResponse
 from Push import xgpush
+from Push.constant import *
+
+
 
 @csrf_exempt
 @api_view(['POST'])
-
-def push_message(request):
+def message_to_all(request):
     """
-    消息推送测试接口
+    推送消息到所有设备
+    """
+    stream = request.read()
+    data = QueryDict(stream, encoding='utf-8')
+    alert = data.get('alert')
+    custom_data = data.get('custom_data')
+    if alert == None:
+        return RestResponse(data=None, message="参数缺失", detail="alert is required", errCode = ERR_MISS_PARAMS)
+    if custom_data != None:
+        try:
+            custom_data = json.loads(custom_data)
+        except:
+            return RestResponse(data=None, message="参数类型错误", detail="custom_data can not be parse json", errCode = ERR_PARSE_JSON_FAILED)
+    
+    result = xgpush.push_message_to_all(message = alert, custom_data = custom_data)
+
+    if result[0] == OK:
+        return RestResponse(data=data, message="发送推送数据成功")
+    else:
+        return RestResponse(data=data, message="发送推送测试数据失败", detail=result[1], errCode=result[0])
+        
+
+
+@csrf_exempt
+@api_view(['POST'])
+def message_to_one(request):
+    """
+    推送消息到单个设备
     """
 
     stream = request.read()
     data = QueryDict(stream, encoding='utf-8')
-
-    device_type = data.get('device_type')
     device_token = data.get('device_token')
-    message = data.get('message')
+    alert = data.get('alert')
+    custom_data = data.get('custom_data')
+    if device_token == None:
+        return RestResponse(data=None, message="参数缺失", detail="device_token is required", errCode = ERR_MISS_PARAMS)
+    if alert == None:
+        return RestResponse(data=None, message="参数缺失", detail="alert is required", errCode = ERR_MISS_PARAMS)
+    if custom_data != None:
+        try:
+            custom_data = json.loads(custom_data)
+        except:
+            return RestResponse(data=None, message="参数类型错误", detail="custom_data can not be parse json", errCode = ERR_PARSE_JSON_FAILED)
 
-    result = (0,'')
+    try:
+        device = Device.objects.get(device_token=device_token)
+        result = (0,'')
+        if device.is_ios():
+            result = xgpush.push_ios_message(device_token = device_token, message = alert, custom_data = custom_data)
+        if device.is_android():
+            result = xgpush.push_android_message(device_token = device_token, title = '1234TV', message = alert, custom_data = custom_data)
+        
+        if result[0] == 0:
+            return RestResponse(data=data, message="发送推送数据成功")
+        else:
+            return RestResponse(data=data, message="发送推送测试数据失败", detail=result[1], errCode=result[0])
 
-    if device_type == 'iOS':
-        result = xgpush.push_ios_message(device_token = device_token, message = message)
+
+    except Device.DoesNotExist:
+        return RestResponse(data=None, message="不存在该设备", detail="device is not exist", errCode = ERR_DEVICE_NOT_EXSIT)
+
+    
+
+@csrf_exempt
+@api_view(['POST'])
+def message_to_multiple(request):
+    stream = request.read()
+    data = QueryDict(stream, encoding='utf-8')
+    device_token_list = data.get('device_token_list')
+    alert = data.get('alert')
+    custom_data = data.get('custom_data')
+    if device_token_list == None:
+        return RestResponse(data=None, message="参数缺失", detail="device_token_list is required", errCode = ERR_MISS_PARAMS)
+    if alert == None:
+        return RestResponse(data=None, message="参数缺失", detail="alert is required", errCode = ERR_MISS_PARAMS)
+    if custom_data != None:
+        try:
+            custom_data = json.loads(custom_data)
+        except:
+            return RestResponse(data=None, message="参数类型错误", detail="custom_data can not be parse json", errCode = ERR_PARSE_JSON_FAILED)
+
+    device_token_list = json.loads(device_token_list)
+    result = xgpush.push_message_to_multiple(device_token_list = device_token_list, message = alert, custom_data = custom_data)
+
+    if result[0] == OK:
+        return RestResponse(data=data, message="发送推送数据成功")
     else:
-        result = xgpush.push_android_message(device_token = device_token, title = '测试推送', message = message)
-
-    if result[0] == 0:
-        return RestResponse(data=data, message="发送推送测试数据成功")
-    else:
-        return RestResponse(data=data, message=result[1])
+        return RestResponse(data=data, message="发送推送测试数据失败", detail=result[1], errCode=result[0])

@@ -12,5 +12,7 @@ from django.conf.urls import url
 from Test import views
 
 urlpatterns = [
-    url(r'^push/message',views.push_message)
+    url(r'^push/message_to_all',views.message_to_all),
+    url(r'^push/message_to_one',views.message_to_one),
+    url(r'^push/message_to_multiple',views.message_to_multiple)
 ]
