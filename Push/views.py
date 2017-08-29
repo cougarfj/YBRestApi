@@ -51,6 +51,30 @@ def register_device(request):
         return RestResponse(data=None,message="注册设备失败",detail=error)
     
 
+@csrf_exempt
+@api_view(['POST'])
+def unregister_device(request):
+    """
+    删除设备
+    """
+    stream = request.read()
+    data = QueryDict(stream, encoding='utf-8')
+
+    device_token = data.get('device_token')
+
+
+    if device_token == None:
+        return RestResponse(data=None, message="device_token is required", errCode = ERR_MISS_PARAMS)
+
+
+    try:
+        device = Device.objects.get(device_token=device_token)
+        device.delete()
+        return RestResponse(data=data,message="删除设备成功")
+
+    except Device.DoesNotExist:
+        return RestResponse(data=None,message="删除设备失败",detail=error, errCode=ERR_DEVICE_NOT_EXSIT)
+
 
 
 @csrf_exempt

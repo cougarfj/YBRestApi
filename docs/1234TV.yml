@@ -106,7 +106,7 @@ paths:
 
   /push/register_device:
     post:
-      summary: 注册推送设备
+      summary: 注册推送设备(用户登录成功后调用)
       parameters:
         - name: device_token
           in: formData
@@ -125,8 +125,19 @@ paths:
           required: true
           description: 设备绑定的用户ID
       tags:
-        - Push-Core
+        - Push
 
+  /push/unregister_device:
+    post:
+      summary: 删除已注册的设备(用户退出登录后调用)
+      parameters:
+        - name: device_token
+          in: formData
+          required: true
+          type: string
+          description: 设备唯一标示符
+      tags:
+        - Push
   
   /push/message_to_one:
     post:
@@ -152,7 +163,7 @@ paths:
               data:{}
             }
       tags:
-        - Push-Core
+        - Push
 
   /push/message_to_multiple:
     post:
@@ -179,7 +190,7 @@ paths:
               data:{}
             }
       tags:
-        - Push-Core
+        - Push
 
   /push/message_to_all:
     post:
@@ -200,7 +211,7 @@ paths:
               data:{}
             }
       tags:
-        - Push-Core
+        - Push
 
 
   
