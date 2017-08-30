@@ -28,7 +28,7 @@ info:
       
   version: "1.0.0"
 # the domain of the service
-host: localhost:8000
+host: zh.1234tv.com
 # array of all schemes that your API supports
 schemes:
   - http
