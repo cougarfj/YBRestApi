@@ -150,8 +150,18 @@ def message_to_one(request):
 
     except Device.DoesNotExist:
         return RestResponse(data=None, message="不存在该用户", detail="user_id is not exist", errCode = ERR_USER_NOT_EXSIT)
+    except Device.MultipleObjectsReturned:
+        device_list = []
+        devices = Device.objects.filter(user_id=user_id)
+        for device in devices:
+            device_list.append(device.device_token)
+        result = xgpush.push_message_to_multiple(device_token_list = device_list, message = alert, custom_data = custom_data)
 
-    
+        if result[0] == OK:
+            return RestResponse(data=data, message="发送推送数据成功")
+        else:
+            return RestResponse(data=data, message="发送推送测试数据失败", detail=result[1], errCode=result[0])
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -179,8 +189,9 @@ def message_to_multiple(request):
 
     device_list = []
     for user_id in user_id_list:
-        device = Device.objects.get(user_id=user_id)
-        device_list.append(device.device_token)
+        devices = Device.objects.filter(user_id=user_id)
+        for device in devices:
+            device_list.append(device.device_token)
 
     result = xgpush.push_message_to_multiple(device_token_list = device_list, message = alert, custom_data = custom_data)
 
@@ -188,3 +199,9 @@ def message_to_multiple(request):
         return RestResponse(data=data, message="发送推送数据成功")
     else:
         return RestResponse(data=data, message="发送推送测试数据失败", detail=result[1], errCode=result[0])
+
+
+
+def getDevice(user_id):
+    devices = Device.objects.filter(user_id = user_id)
+    return devices
