@@ -28,7 +28,7 @@ info:
       
   version: "1.0.0"
 # the domain of the service
-host: zh.1234tv.com
+host: localhost:8000
 # array of all schemes that your API supports
 schemes:
   - http
@@ -213,5 +213,30 @@ paths:
       tags:
         - Push
 
+  /notify/room_start_live:
+    post:
+      summary: 直播间开始直播
+      parameters:
+        - name: room_id
+          in: formData
+          type: string
+          required: true
+          description: 房间ID
+        - name: eng_name
+          in: formData
+          type: string
+          description: 团队名称
+      tags:
+        - Notify
 
-  
+  /notify/room_stop_live:
+    post:
+      summary: 直播间停止直播
+      parameters:
+        - name: room_id
+          in: formData
+          type: string
+          required: true
+          description: 房间ID
+      tags:
+        - Notify
