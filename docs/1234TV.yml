@@ -24,6 +24,7 @@ info:
           NO_ACTION = 0   #没有动作
           OPEN_WEB_BROWSER = 1 #打开浏览器,data里数据为url
           ENTER_LIVE_ROOM = 2 #进入直播间,data里数据为roomID
+          ENTER_TEAM_HOME = 3 #切换团队首页
           <未完待续>
       
   version: "1.0.0"
@@ -213,9 +214,9 @@ paths:
       tags:
         - Push
 
-  /notify/room_start_live:
+  /notify/live:
     post:
-      summary: 直播间开始直播
+      summary: 直播间直播通知
       parameters:
         - name: room_id
           in: formData
@@ -226,17 +227,41 @@ paths:
           in: formData
           type: string
           description: 团队名称
+        - name: alert
+          in: formData
+          type: string
+          description: 弹框标题
       tags:
         - Notify
 
-  /notify/room_stop_live:
+  /notify/web:
     post:
-      summary: 直播间停止直播
+      summary: 打开网页通知
       parameters:
-        - name: room_id
+        - name: url
           in: formData
           type: string
           required: true
-          description: 房间ID
+          description: url地址
+        - name: alert
+          in: formData
+          type: string
+          description: 弹框标题
+      tags:
+        - Notify
+
+  /notify/team:
+    post:
+      summary: 进入团队首页
+      parameters:
+        - name: eng_name
+          in: formData
+          type: string
+          required: true
+          description: 团队英文名称
+        - name: alert
+          in: formData
+          type: string
+          description: 弹框标题
       tags:
         - Notify

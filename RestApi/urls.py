@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^api/doc/',include('swaggerdoc.urls')),
     url(r'^api/v1/push/',include('Push.urls')),
     url(r'^api/v1/test/',include('Test.urls')),
+    url(r'^api/v1/notify/',include('Notify.urls')),
 ]
