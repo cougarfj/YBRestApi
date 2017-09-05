@@ -23,8 +23,8 @@ info:
         自定义数据动作类型(action):
           NO_ACTION = 0   #没有动作
           OPEN_WEB_BROWSER = 1 #打开浏览器,data里数据为url
-          ENTER_LIVE_ROOM = 2 #进入直播间,data里数据为roomID
-          ENTER_TEAM_HOME = 3 #切换团队首页
+          ENTER_LIVE_ROOM = 2 #进入直播间,data里数据为room_id
+          ENTER_TEAM_HOME = 3 #切换团队首页,data里面数据为eng_name
           <未完待续>
       
   version: "1.0.0"
