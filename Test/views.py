@@ -13,7 +13,7 @@ from rest_framework.request import QueryDict
 from RestApi.response import RestResponse
 from Push import xgpush
 from Push.constant import *
-from Push import Device
+from Push.models import Device
 
 
 
