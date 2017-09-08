@@ -36,7 +36,15 @@ def message_to_all(request):
         except:
             return RestResponse(data=None, message="参数类型错误", detail="custom_data can not be parse json", errCode = ERR_PARSE_JSON_FAILED)
     
-    result = xgpush.push_message_to_all(message = alert, custom_data = custom_data)
+    devices = Device.objects.all()
+    if len(devices) == 0 :
+       return RestResponse(data=None,message="没有绑定设备", errCode=ERR_DEVICE_EMPTY)
+    else:
+       device_list = []
+       for device in devices:
+           device_list.append(device.device_token)
+    
+    result = xgpush.push_message_to_multiple(device_token_list = device_list, message = alert, custom_data= custom_data)
 
     if result[0] == OK:
         return RestResponse(data=data, message="发送推送数据成功")
