@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['zh.1234tv.com','localhost','127.0.0.1','192.168.2.117']
 
 INSTALLED_APPS = [
     'Push.apps.PushConfig',
+    'FinancialNews.apps.FinancialnewsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
