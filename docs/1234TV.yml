@@ -265,3 +265,32 @@ paths:
           description: 弹框标题
       tags:
         - Notify
+
+
+  /news/list:
+    get:
+      summary: 资讯列表
+      parameters:
+        - name: news_id
+          in: query
+          type: integer
+          required: true
+          description: 资讯ID
+        - name: offset
+          in: query
+          type: integer
+          description: 偏移量,默认20
+      tags:
+        - News
+
+  /news/detail:
+    get:
+      summary: 资讯详情页
+      parameters:
+        - name: news_id
+          in: query
+          type: integer
+          required: true
+          description: 资讯ID
+      tags:
+        - News

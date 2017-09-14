@@ -17,7 +17,7 @@ ERR_PUSH_MESSAGE_FAILED = 4  #推送出错
 ERR_PARSE_JSON_FAILED = 5    #解析JSON出错
 ERR_DEVICE_EMPTY = 6   #没有设备
 ERR_USER_NOT_EXSIT = 9  #用户不存在
-
+ERR_NEWS_NOT_EXSIT = 10
 
 ERR_XINGE_BUSY = 7     #信鸽服务器繁忙
 ERR_XINGE_TOEKN_NOT_EXSIT = 40  #不存在的device_token
