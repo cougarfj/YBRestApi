@@ -36,7 +36,11 @@ def list(request):
         if offset == None:
             offset = 20
 
-        news_list = News.objects.filter(id__gte = news_id)[0:offset]
+        news_list = []
+        if news_id == 0:
+            news_list = News.objects.all().order_by('-id')[0:offset]
+        else:
+            news_list = News.objects.filter(id__lte = news_id).order_by('-id')[0:offset]
         
         for news in news_list:
             news.content = news.content[0:100]

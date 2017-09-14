@@ -275,7 +275,7 @@ paths:
           in: query
           type: integer
           required: true
-          description: 资讯ID
+          description: 资讯ID,传0获取最新的数据
         - name: offset
           in: query
           type: integer
