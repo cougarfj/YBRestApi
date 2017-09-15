@@ -27,14 +27,16 @@ def list(request):
     """
     queryParams = request.query_params
 
+    offset = queryParams.get('offset') 
+
     try:
         news_id = int(queryParams.get('news_id'))
-        offset = int(queryParams.get('offset'))
+        if offset != None:
+            offset = int(queryParams.get('offset'))
+        else:
+            offset = 20
         if news_id == None:
             return RestResponse(data=None, message="news_id is required", errCode = 1)
-    
-        if offset == None:
-            offset = 20
 
         news_list = []
         if news_id == 0:
