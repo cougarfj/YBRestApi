@@ -105,6 +105,12 @@ paths:
 
 
 
+  /push/list:
+    get:
+      tags:
+        - Push
+
+
   /push/register_device:
     post:
       summary: 注册推送设备(用户登录成功后调用)

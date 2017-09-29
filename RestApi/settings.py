@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['zh.1234tv.com','localhost','127.0.0.1','192.168.2.117']
 # Application definition
 
 INSTALLED_APPS = [
+    'jet.dashboard',
+    'jet',
     'Push.apps.PushConfig',
     'News.apps.NewsConfig',
     'django.contrib.admin',
@@ -171,11 +173,13 @@ LOGGING = {
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.MultiPartParser',
     ),
     'DEFAULT_MODEL_SERIALIZER_CLASS': (
         'rest_framework.serializers.ModelSerializer',
     ),
+    'FORM_METHOD_OVERRIDE': None,
+    'FORM_CONTENT_OVERRIDE': None,
+    'FORM_CONTENTTYPE_OVERRIDE': None
 }
-

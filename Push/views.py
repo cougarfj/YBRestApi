@@ -11,20 +11,92 @@ from rest_framework.renderers import JSONRenderer
 from Push.serializers import DeviceSerializer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.request import QueryDict
-from RestApi.response import RestResponse
+from RestApi.response import RestResponse,ResponseStatus
 from Push.models import Device
 from Push.constant import *
 from Push import xgpush
 import json
+from rest_framework.decorators import parser_classes
+from rest_framework import generics
 
-@csrf_exempt
-@api_view(['POST'])
-def register_device(request):
+
+class DeviceListView(generics.GenericAPIView):
+    """
+    查询列表
+    """
+
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        
+        return RestResponse(data=serializer.data,status=ResponseStatus.OK)
+
+
+
+class RegisterDeviceView(generics.GenericAPIView):
+    
     """
     注册设备
     """
-    stream = request.read()
-    data = QueryDict(stream, encoding='utf-8')
+
+    serializer_class = DeviceSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        data = request.data
+        device_token = data.get('device_token')
+        serializer = None
+        try:
+            device = Device.objects.get(device_token=device_token)
+            serializer = self.get_serializer(device,data=data)
+        except Device.DoesNotExist:
+            serializer = self.get_serializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return RestResponse(data=data,status=ResponseStatus.OK)
+        else:
+            return RestResponse(data=data,status=ResponseStatus.SERIALIZER_ERROR,detail=serializer.errors)
+
+
+
+class UnRegisterDeviceView(generics.GenericAPIView):
+    """
+    解绑设备
+    """
+    serializer_class = DeviceSerializer
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        device_token = data.get('device_token')
+        try:
+            device = Device.objects.get(device_token=device_token)
+            device.is_delete = True
+            device.save()
+            return RestResponse(data=data, status=ResponseStatus.OK)
+        except Device.DoesNotExist:
+            return RestResponse(data=data, status=ResponseStatus.OBJECT_NOT_EXSIT)
+
+
+def register_device(request):
+   
+    # stream = request.read()
+    # data = stream.decode('utf-8')
+    # jsonsss = json.loads(data)    # data = QueryDict(stream, encoding='utf-8')
+
+    data  = request.data()
+
+    data = JSONParser().parse(request)
+
+    return RestResponse(data=data,message="Test")
 
     device_token = data.get('device_token')
     user_id = data.get('user_id')
