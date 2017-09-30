@@ -21,5 +21,12 @@ class Device(models.Model):
 
 class PushMessage(models.Model):
     alert = models.CharField(max_length=256)
-    devices = models.ManyToManyField(Device)
-    user_ids = models.CharField(max_length=100000)
+    user_ids = models.CharField(max_length=21800)
+
+
+class OpenWebPushMessage(PushMessage):
+    url = models.URLField()
+
+    @property
+    def custom_data(self):
+        return {"action":1,"data":{"url":url}}

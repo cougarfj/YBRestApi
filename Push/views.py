@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import FormParser
 from rest_framework.renderers import JSONRenderer
-from Push.serializers import DeviceSerializer
+from Push.serializers import DeviceSerializer,OpenWebPushMessageSerializer
 from django.http import HttpResponse, JsonResponse
 from rest_framework.request import QueryDict
 from RestApi.response import RestResponse,ResponseStatus
@@ -86,68 +86,47 @@ class UnRegisterDeviceView(generics.GenericAPIView):
             return RestResponse(data=data, status=ResponseStatus.OBJECT_NOT_EXSIT)
 
 
-def register_device(request):
-   
-    # stream = request.read()
-    # data = stream.decode('utf-8')
-    # jsonsss = json.loads(data)    # data = QueryDict(stream, encoding='utf-8')
 
-    data  = request.data()
+class NotifyOpenWebView(generics.GenericAPIView):
+    """
+    通知设备打开指定网页
+    """
+    serializer_class = OpenWebPushMessageSerializer
 
-    data = JSONParser().parse(request)
-
-    return RestResponse(data=data,message="Test")
-
-    device_token = data.get('device_token')
-    user_id = data.get('user_id')
-    device_type = data.get('device_type')
-
-    if device_token == None:
-        return RestResponse(data=None, message="device_token is required", errCode = ERR_MISS_PARAMS)
-    if device_type == None:
-        return RestResponse(data=None, message="device_type is required", errCode = ERR_MISS_PARAMS)
-    if user_id == None:
-        return RestResponse(data=None, message="user_id is required", errCode = ERR_MISS_PARAMS)
-
-    try:
-        device = Device.objects.get(device_token=device_token)
-        device.user_id = user_id
-        device.save()
-        return RestResponse(data=data,message="更新设备成功")
-
-    except Device.DoesNotExist:
-        serializer = DeviceSerializer(data=data)
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.get_serializer(data=data)
         if serializer.is_valid():
-            serializer.save()
-            return RestResponse(data=serializer.data,message="注册设备成功")
-        return RestResponse(data=None,message="注册设备失败",detail=error)
-    
+            # serializer.save()
+            try:
+                device_list = get_device_list(serializer.data.user_ids)
+                result = xgpush.push_message_to_multiple(device_token_list = device_list, message = serializer.data.alert, custom_data = serializer.data.custom_data)
+                if result[0] == OK:
+                    return RestResponse(data=data, status=ResponseStatus.OK)
+                else:
+                    return RestResponse(data=data, status=ResponseStatus.PUSH_FAILED, detail=result[1])
 
-@csrf_exempt
-@api_view(['POST'])
-def unregister_device(request):
-    """
-    删除设备
-    """
-    stream = request.read()
-    data = QueryDict(stream, encoding='utf-8')
+            except Exception as e:
+                return RestResponse(data=data,status=ResponseStatus.SERIALIZER_ERROR,detail=str(e))
 
-    device_token = data.get('device_token')
+        else:
+            return RestResponse(data=data,status=ResponseStatus.SERIALIZER_ERROR,detail=serializer.errors)
 
+        
 
-    if device_token == None:
-        return RestResponse(data=None, message="device_token is required", errCode = ERR_MISS_PARAMS)
-
-
-    try:
-        device = Device.objects.get(device_token=device_token)
-        device.delete()
-        return RestResponse(data=data,message="删除设备成功")
-
-    except Device.DoesNotExist:
-        return RestResponse(data=None,message="删除设备失败",detail=error, errCode=ERR_DEVICE_NOT_EXSIT)
+        
 
 
+
+
+def get_device_list(user_ids):
+    user_id_list = json.loads(user_ids)
+    device_list = []
+    for user_id in user_id_list:
+        devices = Device.objects.filter(user_id=user_id)
+        for device in devices:
+            device_list.append(device.device_token) 
+    return device_list
 
 @csrf_exempt
 @api_view(['POST'])

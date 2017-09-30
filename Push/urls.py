@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^list',views.DeviceListView.as_view()),
     url(r'^register_device',views.RegisterDeviceView.as_view()),
     url(r'^unregister_device',views.UnRegisterDeviceView.as_view()),
-    url(r'^message_to_all',views.message_to_all),
+    url(r'^web',views.NotifyOpenWebView.as_view()),
     url(r'^message_to_one',views.message_to_one),
     url(r'^message_to_multiple',views.message_to_multiple)
 ]

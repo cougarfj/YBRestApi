@@ -240,10 +240,15 @@ paths:
       tags:
         - Notify
 
-  /notify/web:
+  /push/web:
     post:
       summary: 打开网页通知
       parameters:
+        - name: user_ids
+          in: formData
+          type: string
+          required: true
+          description: 推送的用户id列表
         - name: url
           in: formData
           type: string
@@ -254,7 +259,7 @@ paths:
           type: string
           description: 弹框标题
       tags:
-        - Notify
+        - Push
 
   /notify/team:
     post:
