@@ -26,7 +26,7 @@ ios_push = xinge.XingeApp(accessId = IOS_ACCESS_ID, secretKey = IOS_SECRET_KEY)
 
 def push_ios_message(device_token, message, custom_data = {}):
     msg = buildIOSMessage(message = message, custom_data = custom_data)
-    return ios_push.PushSingleDevice(deviceToken = device_token, message = msg, environment = constant.ENV_DEV)
+    return ios_push.PushSingleDevice(deviceToken = device_token, message = msg, environment = constant.ENV_PROD)
 
 def push_android_message(device_token, title, message, custom_data = {}):
     msg = buildAndroidMessage(message = message, custom_data = custom_data)
@@ -38,7 +38,7 @@ def push_message_to_all(message, custom_data = {}):
     ios_msg = buildIOSMessage(message=message, custom_data = custom_data)
 
     (errRet_Android,errMsg_Android) =  android_push.PushAllDevices(deviceType = 0, message = android_msg)
-    (errRet_iOS,errMsg_iOS) = ios_push.PushAllDevices(deviceType = 0, message = ios_msg, environment = constant.ENV_DEV)
+    (errRet_iOS,errMsg_iOS) = ios_push.PushAllDevices(deviceType = 0, message = ios_msg, environment = constant.ENV_PROD)
     
     if errRet_Android == 0 and errRet_iOS == 0 :
         return (constant.ERR_OK,None)
@@ -53,7 +53,7 @@ def push_message_to_multiple(device_token_list, message, custom_data={}):
     ios_msg = buildIOSMessage(message=message, custom_data = custom_data)
 
     result_android = android_push.CreateMultipush(android_msg)
-    result_ios = ios_push.CreateMultipush(ios_msg,environment=constant.ENV_DEV)
+    result_ios = ios_push.CreateMultipush(ios_msg,environment=constant.ENV_PROD)
 
     (errRet_Android,errMsg_Android) =  android_push.PushDeviceListMultiple(pushId = result_android[2], deviceList = device_token_list)
     (errRet_iOS,errMsg_iOS) = ios_push.PushDeviceListMultiple(pushId = result_ios[2], deviceList = device_token_list)
