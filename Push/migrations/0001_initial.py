@@ -23,22 +23,5 @@ class Migration(migrations.Migration):
                 ('update_time', models.DateTimeField(auto_now=True)),
                 ('is_delete', models.BooleanField(default=False)),
             ],
-        ),
-        migrations.CreateModel(
-            name='PushMessage',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('alert', models.CharField(max_length=256)),
-                ('user_ids', models.CharField(max_length=21800)),
-                ('custom_data', models.CharField(max_length=500)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='OpenWebPushMessage',
-            fields=[
-                ('pushmessage_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='Push.PushMessage')),
-                ('url', models.URLField()),
-            ],
-            bases=('Push.pushmessage',),
-        ),
+        )
     ]
