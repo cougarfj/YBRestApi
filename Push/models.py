@@ -1,5 +1,5 @@
 from django.db import models
-
+from Push.constant import *
 # Create your models here.
 
 
@@ -17,16 +17,3 @@ class Device(models.Model):
 
     def is_android(self):
         return self.device_type == "Android"
-
-
-class PushMessage(models.Model):
-    alert = models.CharField(max_length=256)
-    user_ids = models.CharField(max_length=21800)
-
-
-class OpenWebPushMessage(PushMessage):
-    url = models.URLField()
-
-    @property
-    def custom_data(self):
-        return {"action":1,"data":{"url":url}}

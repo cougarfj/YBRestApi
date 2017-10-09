@@ -3,28 +3,17 @@ info:
   title: 1234TV API
   description: |
     相关常量枚举:
-
-
-        接口返回状态码(code):
-          OK = 0                    #正常调用
-          ERR_MISS_PARAMS = 1       #缺少参数 
-          ERR_PARAMS_ERROR = 2      #参数错误
-          ERR_DEVICE_NOT_EXSIT = 3  #设备不存在
-          ERR_PUSH_MESSAGE_FAILED = 4  #推送出错
-          ERR_PARSE_JSON_FAILED = 5    #解析JSON出错
-          ERR_DEVICE_EMPTY = 6   #没有设备
-          ERR_USER_NOT_EXSIT = 9  #用户不存在
-          ERR_XINGE_BUSY = 7     #信鸽服务器繁忙
-          ERR_XINGE_TOEKN_NOT_EXSIT = 40  #不存在的device_token
-          ERR_XINGE_APNS_BUSY = 71 #APNS服务器繁忙
-          ERR_XINGE_MSG_TOO_LONG = 73  #消息数据太长(iOS长度限制:256个字节,Android长度限制:800个字节)
-          ERR_XINGE_MSG_FREQUENT =76 #请求太过频繁
+        
+        接口返回状态码(code):  
+          OK = ("操作成功",0)
+          SERIALIZER_ERROR = ("序列化失败",1)
+          OBJECT_NOT_EXSIT = ("对象不存在",2)
+          PUSH_FAILED = ("推送失败",3)
 
         自定义数据动作类型(action):
-          NO_ACTION = 0   #没有动作
-          OPEN_WEB_BROWSER = 1 #打开浏览器,data里数据为url
-          ENTER_LIVE_ROOM = 2 #进入直播间,data里数据为room_id
-          ENTER_TEAM_HOME = 3 #切换团队首页,data里面数据为eng_name
+          PUSH_ACTION_OPEN_WEBVIEW = 1   #打开Web网页
+          PUSH_ACTION_OPEN_LIVEROOM = 2  #打开直播间
+          PUSH_ACTION_OPEN_TEAMHALL = 3  #打开团队首页
           <未完待续>
       
   version: "1.0.0"
@@ -39,72 +28,6 @@ basePath: /api/v1
 produces:
   - application/json
 paths:
-  /test/push/message_to_one:
-    post:
-      summary: 推送消息给单个设备
-      parameters:
-        - name: device_token
-          in: formData
-          required: true
-          type: string
-          description: 设备唯一标示符
-        - name: device_type
-          in: formData
-          enum: ['iOS','Android']
-          required: true
-          type: string
-          description: 设备类型
-        - name: alert
-          in: formData
-          type: string
-          required: true
-          description: 需要推送的弹框标题
-        - name: custom_data
-          in: formData
-          type: string
-          description: 额外自定义消息
-      tags:
-        - Test
-
-  /test/push/message_to_multiple:
-    post:
-      summary: 推送消息到多个设备
-      parameters:
-        - name: device_token_list
-          in: formData
-          required: true
-          type: string
-          description: 设备ID列表(json字符串格式)
-        - name: alert
-          in: formData
-          type: string
-          required: true
-          description: 需要推送的弹框标题
-        - name: custom_data
-          in: formData
-          type: string
-          description: 额外自定义消息
-      tags:
-        - Test
-
-  /test/push/message_to_all:
-    post:
-      summary: 推送消息到所有设备
-      parameters:
-        - name: alert
-          in: formData
-          type: string
-          required: true
-          description: 需要推送的弹框标题
-        - name: custom_data
-          in: formData
-          type: string
-          description: 额外自定义消息
-      tags:
-        - Test
-
-
-
   /push/list:
     get:
       tags:
@@ -145,85 +68,16 @@ paths:
           description: 设备唯一标示符
       tags:
         - Push
-  
-  /push/message_to_one:
-    post:
-      summary: 推送消息给单个用户
-      parameters:
-        - name: user_id
-          in: formData
-          required: true
-          type: string
-          description: 用户ID
-        - name: alert
-          in: formData
-          type: string
-          required: true
-          description: 需要推送的弹框标题
-        - name: custom_data
-          in: formData
-          type: string
-          description: | 
-            额外自定义消息(JSON格式字符串),格式如下:
-            {
-              action:1
-              data:{}
-            }
-      tags:
-        - Push
 
-  /push/message_to_multiple:
-    post:
-      summary: 推送消息给多个用户(2~1000范围内)
-      description: 超出1000范围内的用户请多次调用本接口
-      parameters:
-        - name: user_id_list
-          in: formData
-          required: true
-          type: string
-          description: 用户ID列表(json字符串格式)
-        - name: alert
-          in: formData
-          type: string
-          required: true
-          description: 需要推送的弹框标题
-        - name: custom_data
-          in: formData
-          type: string
-          description: | 
-            额外自定义消息(JSON格式字符串),格式如下:
-            {
-              action:1
-              data:{}
-            }
-      tags:
-        - Push
-
-  /push/message_to_all:
-    post:
-      summary: 推送消息给所有用户
-      parameters:
-        - name: alert
-          in: formData
-          type: string
-          required: true
-          description: 需要推送的弹框标题
-        - name: custom_data
-          in: formData
-          type: string
-          description: | 
-            额外自定义消息(JSON格式字符串),格式如下:
-            {
-              action:1
-              data:{}
-            }
-      tags:
-        - Push
-
-  /notify/live:
+  /push/live:
     post:
       summary: 直播间直播通知
       parameters:
+        - name: user_ids
+          in: formData
+          type: string
+          required: true
+          description: 推送的用户id列表(逗号分隔,sample:1,2,3)
         - name: room_id
           in: formData
           type: string
@@ -238,7 +92,7 @@ paths:
           type: string
           description: 弹框标题
       tags:
-        - Notify
+        - Push
 
   /push/web:
     post:
@@ -248,7 +102,7 @@ paths:
           in: formData
           type: string
           required: true
-          description: 推送的用户id列表
+          description: 推送的用户id列表(逗号分隔,sample:1,2,3)
         - name: url
           in: formData
           type: string
@@ -261,10 +115,15 @@ paths:
       tags:
         - Push
 
-  /notify/team:
+  /push/team:
     post:
       summary: 进入团队首页
       parameters:
+        - name: user_ids
+          in: formData
+          type: string
+          required: true
+          description: 推送的用户id列表(逗号分隔,sample:1,2,3)
         - name: eng_name
           in: formData
           type: string
@@ -275,7 +134,7 @@ paths:
           type: string
           description: 弹框标题
       tags:
-        - Notify
+        - Push
 
 
   /news/list:

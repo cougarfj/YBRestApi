@@ -24,3 +24,10 @@ ERR_XINGE_TOEKN_NOT_EXSIT = 40  #不存在的device_token
 ERR_XINGE_APNS_BUSY = 71 #APNS服务器繁忙
 ERR_XINGE_MSG_TOO_LONG = 73  #消息数据太长(iOS长度限制:256个字节,Android长度限制:800个字节)
 ERR_XINGE_MSG_FREQUENT =76 #请求太过频繁
+
+
+
+
+PUSH_ACTION_OPEN_WEBVIEW = 1   #打开Web网页
+PUSH_ACTION_OPEN_LIVEROOM = 2  #打开直播间
+PUSH_ACTION_OPEN_TEAMHALL = 3  #打开团队首页

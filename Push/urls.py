@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^register_device',views.RegisterDeviceView.as_view()),
     url(r'^unregister_device',views.UnRegisterDeviceView.as_view()),
     url(r'^web',views.NotifyOpenWebView.as_view()),
-    url(r'^message_to_one',views.message_to_one),
-    url(r'^message_to_multiple',views.message_to_multiple)
+    url(r'^live',views.NotifyOpenLiveRoom.as_view()),
+    url(r'^team',views.NotifyOpenTeamHall.as_view())
 ]
