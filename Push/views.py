@@ -63,6 +63,7 @@ class RegisterDeviceView(generics.GenericAPIView):
 
         if serializer.is_valid():
             serializer.save()
+            # xgpush.setTag(serializer.instance.user_id,serializer.instance.device_token,serializer.instance.device_type)
             return RestResponse(data=data,status=ResponseStatus.OK)
         else:
             return RestResponse(data=data,status=ResponseStatus.SERIALIZER_ERROR,detail=serializer.errors)
@@ -99,6 +100,8 @@ class PushCustomDataView(generics.GenericAPIView):
                 serializer_data = serializer.data
                 device_list = get_device_list(serializer.user_ids)
                 result = xgpush.push_message_to_multiple(device_token_list = device_list, message = serializer.alert, custom_data = serializer.custom_data)
+                # tags = get_tags(serializer.user_ids)
+                # result = xgpush.push_message_to_tags(tags,message=serializer.alert,custom_data=serializer.custom_data)
                 if result[0] == OK:
                     return RestResponse(data=data, status=ResponseStatus.OK)
                 else:
@@ -136,6 +139,9 @@ class NotifyOpenTeamHall(PushCustomDataView):
 
 
 
+def get_tags(user_ids):
+    user_id_list = user_ids.split(',')
+    return user_id_list
 
 def get_device_list(user_ids):
     user_id_list = user_ids.split(',')

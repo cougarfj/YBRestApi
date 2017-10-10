@@ -8,7 +8,7 @@
 # Description: 
 #
 
-from xinge_push import xinge,constant,style
+from xinge_push import xinge,constant,style,TagTokenPair
 from Push.constant import *
 
 
@@ -40,6 +40,42 @@ def push_message_to_all(message, custom_data = {}):
     (errRet_Android,errMsg_Android) =  android_push.PushAllDevices(deviceType = 0, message = android_msg)
     (errRet_iOS,errMsg_iOS) = ios_push.PushAllDevices(deviceType = 0, message = ios_msg, environment = constant.ENV_PROD)
     
+    if errRet_Android == 0 and errRet_iOS == 0 :
+        return (constant.ERR_OK,None)
+    elif errRet_Android != 0 and errRet_iOS == 0:
+        return (errRet_Android,errMsg_Android)
+    else:   
+        return (errRet_iOS,errMsg_iOS)
+
+
+
+def setTag(tag,token,type):
+    tagPair = TagTokenPair(tag,token)
+    result = None
+    if type == "iOS":
+        result = ios_push.BatchSetTag([tagPair])
+    elif type == "Android":
+        result = android_push.BatchSetTag([tagPair])
+    else:
+        pass
+
+def getTag(token):
+    result = None
+    (_,_,result) = ios_push.QueryTokenTags(token)
+    (_,_,result) = android_push.QueryTokenTags(token)
+    if result != None and len(result) > 0 :
+        return result[0]
+    else:
+        return None
+
+def push_message_to_tags(tags,message,custom_data={}):
+
+    android_msg = buildAndroidMessage(message = message, custom_data = custom_data)
+    ios_msg = buildIOSMessage(message=message, custom_data = custom_data)
+
+    (errRet_iOS,errMsg_iOS,_) = ios_push.PushTags(0,tags,'OR',ios_msg,environment=constant.ENV_PROD)
+    (errRet_Android,errMsg_Android,_) = android_push.PushTags(0,tags,'OR',android_msg)
+
     if errRet_Android == 0 and errRet_iOS == 0 :
         return (constant.ERR_OK,None)
     elif errRet_Android != 0 and errRet_iOS == 0:
