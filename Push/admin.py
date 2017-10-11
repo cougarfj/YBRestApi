@@ -15,6 +15,7 @@ admin.site.register(OpenWebMessage,OpenWebMessageAdmin)
 
 
 class DeviceAdmin(admin.ModelAdmin):
+    date_hierarchy = 'update_time'
     list_display = ('device_token','device_type','user_id','update_time','is_delete')
     list_filter = ('device_type','update_time','is_delete')
     ordering = ['update_time']
@@ -22,8 +23,15 @@ class DeviceAdmin(admin.ModelAdmin):
     actions = ['send_push']
 
     def send_push(self, request, queryset):
-        print("send_push")
+        user_ids = None
+        for device in queryset:
+            if user_ids == None:
+                user_ids =  device.user_id
+            else:
+                user_ids = user_ids +  "," + device.user_id
 
-    send_push.short_description = "对选中设备发送推送"
+        self.message_user(request,user_ids)
+
+    send_push.short_description = "获取user_ids"
 
 admin.site.register(Device,DeviceAdmin)
