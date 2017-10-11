@@ -41,6 +41,44 @@ class DeviceListView(generics.GenericAPIView):
         return RestResponse(data=serializer.data,status=ResponseStatus.OK)
 
 
+class DeviceFilterView(generics.GenericAPIView):
+    """
+    过滤列表
+    """
+    queryset = Device.objects.all()
+    serializer_class = DeviceSerializer
+    def get(self, request, *args, **kwargs):
+
+        data = request.query_params
+        is_delete = data.get('is_delete')
+        after_time = data.get('after_time')
+        device_type = data.get('device_type')
+
+        if is_delete != None:
+            self.queryset = self.queryset.filter(is_delete = is_delete)
+        if device_type != None:
+            self.queryset = self.queryset.filter(device_type = device_type)
+        if after_time != None:
+            try:
+                self.queryset = self.queryset.filter(update_time__lte = after_time)
+            except Exception as e:
+                return RestResponse(data=data,status=ResponseStatus.PARAMS_ERROR,detail=str(e)) 
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        user_ids = None
+        for device in queryset:
+            if user_ids == None:
+                user_ids =  device.user_id
+            else:
+                user_ids = user_ids +  "," + device.user_id
+        
+        return RestResponse(data=user_ids,status=ResponseStatus.OK)
+
 
 class RegisterDeviceView(generics.GenericAPIView):
     
@@ -100,8 +138,8 @@ class PushCustomDataView(generics.GenericAPIView):
                 serializer_data = serializer.data
                 device_list = get_device_list(serializer.user_ids)
                 result = xgpush.push_message_to_multiple(device_token_list = device_list, message = serializer.alert, custom_data = serializer.custom_data)
-                # tags = get_tags(serializer.user_ids)
-                # result = xgpush.push_message_to_tags(tags,message=serializer.alert,custom_data=serializer.custom_data)
+                tags = get_tags(serializer.user_ids)
+                result = xgpush.push_message_to_tags(tags,message=serializer.alert,custom_data=serializer.custom_data)
                 if result[0] == OK:
                     return RestResponse(data=data, status=ResponseStatus.OK)
                 else:
@@ -135,6 +173,9 @@ class NotifyOpenTeamHall(PushCustomDataView):
     通知设备打开团队首页
     """
     serializer_class = OpenTeamHallMessageSerializer
+
+
+
 
 
 

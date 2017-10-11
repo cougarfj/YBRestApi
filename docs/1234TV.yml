@@ -28,8 +28,54 @@ basePath: /api/v1
 produces:
   - application/json
 paths:
+
+  /push/search:
+    get:
+      summary: 搜索接口
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          type: string
+          description: 用户id
+      tags:
+        - Push
+
   /push/list:
     get:
+      summary: 获取列表
+      parameters:
+        - name: device_id
+          in: query
+          required: true
+          type: string
+          description: 设备id
+        - name: offset
+          in: query
+          required: true
+          type: integer
+          description: 偏移量
+      tags:
+        - Push
+
+
+  /push/filter:
+    get:
+      summary: 根据过滤用户,输出用户列表
+      parameters:
+        - name: is_delete
+          in: query
+          type: boolean
+          description: 设备唯一标示符
+        - name: device_type
+          in: query
+          enum: ['iOS','Android']
+          type: string
+          description: 设备类型
+        - name: after_time
+          in: query
+          type: string
+          description: after_time时间之前
       tags:
         - Push
 

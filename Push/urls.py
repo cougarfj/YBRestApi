@@ -13,6 +13,8 @@ from Push import views
 
 urlpatterns = [
     url(r'^list',views.DeviceListView.as_view()),
+    url(r'^filter',views.DeviceFilterView.as_view()),
+    url(r'^search',views.DeviceListView.as_view()),
     url(r'^register_device',views.RegisterDeviceView.as_view()),
     url(r'^unregister_device',views.UnRegisterDeviceView.as_view()),
     url(r'^web',views.NotifyOpenWebView.as_view()),

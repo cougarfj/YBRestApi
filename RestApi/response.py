@@ -15,6 +15,7 @@ class ResponseStatus(Enum):
     SERIALIZER_ERROR = ("序列化失败",1)
     OBJECT_NOT_EXSIT = ("对象不存在",2)
     PUSH_FAILED = ("推送失败",3)
+    PARAMS_ERROR = ("参数错误",4)
 
 class RestResponse(JsonResponse):
     
