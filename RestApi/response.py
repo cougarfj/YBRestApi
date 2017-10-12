@@ -16,6 +16,7 @@ class ResponseStatus(Enum):
     OBJECT_NOT_EXSIT = ("对象不存在",2)
     PUSH_FAILED = ("推送失败",3)
     PARAMS_ERROR = ("参数错误",4)
+    UNSUPPORT_ACTION = ("不支持的操作",5)
 
 class RestResponse(JsonResponse):
     
