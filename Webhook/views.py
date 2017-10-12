@@ -26,7 +26,9 @@ class OSChinaWebhook(generics.GenericAPIView):
         if password != self.password:
             return RestResponse(data=None,status=ResponseStatus.PARAMS_ERROR)
         
-        os.system('sh deploy.sh '+ self.project_path)
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        cmd = "sh "+ current_path+"/deploy.sh " + self.project_path
+        os.system(cmd)
         return RestResponse(data=None,status=ResponseStatus.OK)
 
 
