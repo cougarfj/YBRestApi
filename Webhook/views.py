@@ -27,7 +27,7 @@ class OSChinaWebhook(generics.GenericAPIView):
             return RestResponse(data=None,status=ResponseStatus.PARAMS_ERROR)
         
         current_path = os.path.dirname(os.path.realpath(__file__))
-        cmd = "sh "+ current_path+"/deploy.sh " + self.project_path
+        cmd = "sh "+ current_path+"/git_pull.sh " + self.project_path
         os.system(cmd)
         return RestResponse(data=None,status=ResponseStatus.OK)
 
