@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^api/v1/news/',include('News.urls')),
 
     url(r'^webhook/',include('Webhook.urls')),
+    url(r'^course/',include('Course.urls')),
 ]

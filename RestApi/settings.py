@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['zh.1234tv.com','localhost','127.0.0.1','192.168.2.117']
 INSTALLED_APPS = [
     'jet.dashboard',
     'jet',
+    'Course.apps.CourseConfig',
     'Push.apps.PushConfig',
     'News.apps.NewsConfig',
     'django.contrib.admin',
