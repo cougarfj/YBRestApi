@@ -24,12 +24,14 @@ class PushMessageSerializer(serializers.Serializer):
 
     alert = serializers.CharField(max_length=200)
     user_ids = serializers.CharField(max_length=21800)
+    send_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', required=False)
     custom_data = serializers.CharField(max_length=21800, required=False)
 
     def __init__(self, instance=None, data=None, **kwargs):
         super().__init__(instance, data, **kwargs)
         self.alert = data.get('alert')
         self.user_ids = data.get('user_ids')
+        self.send_time = data.get('send_time')
 
 class OpenWebPushMessageSerializer(PushMessageSerializer):
     

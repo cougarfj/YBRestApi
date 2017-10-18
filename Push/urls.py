@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^search',views.DeviceListView.as_view()),
     url(r'^register_device',views.RegisterDeviceView.as_view()),
     url(r'^unregister_device',views.UnRegisterDeviceView.as_view()),
-    url(r'^web',views.NotifyOpenWebView.as_view()),
-    url(r'^live',views.NotifyOpenLiveRoom.as_view()),
-    url(r'^team',views.NotifyOpenTeamHall.as_view())
+    url(r'^open_webview',views.NotifyOpenWebView.as_view()),
+    url(r'^open_liveroom',views.NotifyOpenLiveRoom.as_view()),
+    url(r'^open_teamhall',views.NotifyOpenTeamHall.as_view())
 ]

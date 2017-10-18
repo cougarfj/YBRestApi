@@ -68,10 +68,10 @@ def getTag(token):
     else:
         return None
 
-def push_message_to_tags(tags,message,custom_data={}):
+def push_message_to_tags(tags, message, custom_data={}, send_time=None):
 
-    android_msg = buildAndroidMessage(message = message, custom_data = custom_data)
-    ios_msg = buildIOSMessage(message=message, custom_data = custom_data)
+    android_msg = buildAndroidMessage(message = message, custom_data = custom_data, send_time=send_time)
+    ios_msg = buildIOSMessage(message=message, custom_data = custom_data, send_time=send_time)
 
     (errRet_iOS,errMsg_iOS,_) = ios_push.PushTags(0,tags,'OR',ios_msg,environment=constant.ENV_PROD)
     (errRet_Android,errMsg_Android,_) = android_push.PushTags(0,tags,'OR',android_msg)
@@ -102,12 +102,13 @@ def push_message_to_multiple(device_token_list, message, custom_data={}):
         return (errRet_iOS,errMsg_iOS)
 
 
-def buildAndroidMessage(message,custom_data={}):
+def buildAndroidMessage(message, custom_data={}, send_time=None):
     msg = xinge.Message()
     msg.title = "1234TV"
     msg.content = message
     msg.type = constant.MESSAGE_TYPE_ANDROID_NOTIFICATION
     msg.expireTime = 86400
+    msg.sendTime = send_time
     if custom_data == None:
         msg.custom = {}
     else:
@@ -116,10 +117,11 @@ def buildAndroidMessage(message,custom_data={}):
     msg.style = style.Style()
     return msg
 
-def buildIOSMessage(message,custom_data={}):
+def buildIOSMessage(message,custom_data={}, send_time=None):
     msg = xinge.MessageIOS()
     msg.alert = message
     msg.expireTime = 86400
+    msg.sendTime = send_time
     if custom_data == None:
         msg.custom = {}
     else:

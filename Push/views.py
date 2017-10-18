@@ -136,10 +136,10 @@ class PushCustomDataView(generics.GenericAPIView):
         if serializer.is_valid():
             try:
                 serializer_data = serializer.data
-                device_list = get_device_list(serializer.user_ids)
-                result = xgpush.push_message_to_multiple(device_token_list = device_list, message = serializer.alert, custom_data = serializer.custom_data)
-                # tags = get_tags(serializer.user_ids)
-                # result = xgpush.push_message_to_tags(tags,message=serializer.alert,custom_data=serializer.custom_data)
+                # device_list = get_device_list(serializer.user_ids)
+                # result = xgpush.push_message_to_multiple(device_token_list = device_list, message = serializer.alert, custom_data = serializer.custom_data)
+                tags = get_tags(serializer.user_ids)
+                result = xgpush.push_message_to_tags(tags,message=serializer.alert, custom_data=serializer.custom_data, send_time=serializer.send_time)
                 if result[0] == OK:
                     return RestResponse(data=data, status=ResponseStatus.OK)
                 else:
