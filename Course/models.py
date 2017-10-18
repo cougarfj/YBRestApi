@@ -19,7 +19,7 @@ class Lesson(models.Model):
     teacher = models.CharField(max_length=100)
     price = models.IntegerField()
     hasBuy = models.BooleanField()
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, related_name='lessons', on_delete=models.CASCADE)
     video_url = models.URLField()
     created_time = models.DateTimeField(auto_now=True)
 
@@ -27,7 +27,7 @@ class Lesson(models.Model):
 class Comment(models.Model):
     
     star_nums = models.IntegerField()
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, related_name='comments', on_delete=models.CASCADE)
     content = models.TextField()
     user_id = models.CharField(max_length=100)
     created_time = models.DateTimeField(auto_now=True)

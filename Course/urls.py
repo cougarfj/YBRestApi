@@ -8,8 +8,9 @@
 # Description: 
 #
 from django.conf.urls import url
-from .views import CourseList
+from .views import CourseList,CourseDetail
 
 urlpatterns = [
-    url(r'^list',CourseList.as_view())
+    url(r'^list',CourseList.as_view()),
+    url(r'^detail',CourseDetail.as_view()),
 ]

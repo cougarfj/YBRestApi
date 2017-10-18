@@ -35,16 +35,25 @@ class CourseListSerializer(serializers.ModelSerializer):
         model = Course
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
 class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
         fields = '__all__'
 
-class CommentSerializer(serializers.ModelSerializer):
+class CourseDetailSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
     class Meta:
-        model = Comment
-        fields = '__all__'
+        model = Course
+        fields = ('id','name','introduce','lessons','comments','price','buy_nums','teacher_avatar','teacher_name','teacher_title','created_time')
+
+
 
 
 
