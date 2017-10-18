@@ -34,7 +34,8 @@ class DeviceListView(generics.GenericAPIView):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            response = self.get_paginated_response(serializer.data)
+            return RestResponse(data=response.data,status=ResponseStatus.OK)
 
         serializer = self.get_serializer(queryset, many=True)
         

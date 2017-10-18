@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^api/v1/test/',include('Test.urls')),
     url(r'^api/v1/notify/',include('Notify.urls')),
     url(r'^api/v1/news/',include('News.urls')),
-
+    url(r'^api/v1/course/',include('Course.urls')),
     url(r'^webhook/',include('Webhook.urls')),
-    url(r'^course/',include('Course.urls')),
+   
 ]
