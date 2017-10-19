@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 # Create your views here.
-from .models import Course,Lesson,Comment
-from .serializers import CourseListSerializer,CourseDetailSerializer,LessonSerializer,CommentSerializer
+from .models import Course,Lesson,Comment,Advertisement
+from .serializers import CourseListSerializer,CourseDetailSerializer,LessonSerializer,CommentSerializer,AdvertisementSerializer
 from RestApi.response import RestResponse,ResponseStatus
 
 class CourseList(generics.GenericAPIView):
@@ -39,3 +39,22 @@ class CourseDetail(generics.GenericAPIView):
             self.queryset = Course.objects.get(id=course_id)
             serializer = self.get_serializer(self.queryset)
             return RestResponse(data=serializer.data,status=ResponseStatus.OK)
+
+
+class RecommendCourseList(generics.GenericAPIView):
+    queryset = Course.objects.filter(is_recommend=True)[:4]
+    serializer_class = CourseListSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return RestResponse(data=serializer.data,status=ResponseStatus.OK)
+
+class AdList(generics.GenericAPIView):
+    queryset = Advertisement.objects.filter(is_show=True)
+    serializer_class = AdvertisementSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return RestResponse(data=serializer.data,status=ResponseStatus.OK)
