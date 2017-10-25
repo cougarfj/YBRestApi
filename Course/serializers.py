@@ -20,6 +20,7 @@ class CourseListSerializer(serializers.ModelSerializer):
         return {
             'id':obj.id,
             'name':obj.name,
+            'cover_url':obj.video_cover_url,
             'introduce':obj.introduce,
             'lesson_nums':Lesson.objects.filter(course=obj).count(),
             'stars_avg':Comment.objects.filter(course=obj).aggregate(Avg('star_nums')).get('star_nums__avg'),

@@ -8,6 +8,7 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     introduce = models.TextField()
     is_recommend = models.BooleanField()  #是否是热门推荐
+    video_cover_url = models.URLField(blank=True)
     price = models.IntegerField()
     teacher_avatar = models.URLField()
     teacher_name = models.CharField(max_length=100)
@@ -20,6 +21,7 @@ class Lesson(models.Model):
     price = models.IntegerField()
     course = models.ForeignKey(Course, related_name='lessons', on_delete=models.CASCADE)
     video_url = models.URLField()
+    video_thumb_url = models.URLField(blank=True)
     created_time = models.DateTimeField(auto_now=True)
 
 
